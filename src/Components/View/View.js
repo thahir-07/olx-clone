@@ -1,7 +1,13 @@
-import React from 'react';
+import React,{useState,useContext, useEffect} from 'react';
 
 import './View.css';
+import { postContext } from '../../Store/PostContext';
 function View() {
+  const [userDetails,setUserDetails]=useState(null)
+  const {postDetails,setPostDetails}=useContext(postContext)
+  useEffect(()=>{
+
+  },[])
   return (
     <div className="viewParentDiv">
       <div className="imageShowDiv">

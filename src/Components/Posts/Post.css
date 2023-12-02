@@ -39,6 +39,7 @@
   height: 270px;
   display: inline-block;
   cursor: pointer;
+  background-color: rgb(255, 255, 255);
 }
 
 .card .favorite {
@@ -84,4 +85,7 @@
 .recommendations .heading span {
   font-size: 24px;
   color: #002f34;
+}
+.link:active{
+  color: rgb(30, 6, 31);
 }

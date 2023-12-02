@@ -2,21 +2,41 @@ import React,{useState,useContext} from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '../../olx-logo.png';
 import './Signup.css';
-import firebaseContext from '../../Store/firebaseContext';
+import {AuthContext, firebaseContext} from '../../Store/Context';
 import {getAuth,createUserWithEmailAndPassword} from 'firebase/auth'
+import {useNavigate} from 'react-router-dom'
+import { getFirestore,collection,addDoc } from 'firebase/firestore';
 
 export default function Signup() {
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState('');
-  const [number, setNumber] = useState('');
+  const [phone, setPhone] = useState(null);
   const {firebase} =useContext(firebaseContext)
+ 
+  const navigate=useNavigate()
+  const db=getFirestore(firebase)
   const handleSubmit=(e)=>{
     e.preventDefault();
-    console.log(name,email,password,number)
+    console.log(name,email,password,phone)
     const auth=getAuth(firebase)
-    createUserWithEmailAndPassword(auth,email,password).then((response)=>{
-    console.log(response)
+    createUserWithEmailAndPassword(auth,email,password).then(async (response)=>{
+    console.log(response.user)
+    response.user.displayName=name
+
+
+    try{
+      const docRef=await addDoc(collection(db,'user'),{
+        id:response.user.uid,
+        username:response.user.displayName,
+        phone:phone
+        
+      })
+      navigate('/login')
+    }catch(e){
+      console.log(e)
+    }   
+    
     })
   }
   return (
@@ -27,7 +47,7 @@ export default function Signup() {
           handleSubmit(e)
 
         }}>
-          <label htmlFor="fname">Username</label>
+          <label htmlFor="name">Username</label>
           <br />
           <input
             className="input"
@@ -35,17 +55,17 @@ export default function Signup() {
             id="name"
             name="name"
             value={name}
-            defaultValue='Thahir'
             onChange={(e)=>setName(e.target.value)}
           />
           <br />
-          <label htmlFor="fname">Email</label>
+          <label htmlFor="email">Email</label>
           <br />
           <input
             className="input"
             type="email"
             id="email"
             name="email"
+            value={email}
             onChange={e=>setEmail(e.target.value)}
           />
           <br />
@@ -56,7 +76,8 @@ export default function Signup() {
             type="tel"
             id="phone"
             name="phone"
-            onChange={e=>{setNumber(e.target.value)}}
+            value={phone}
+            onChange={e=>{setPhone(e.target.value)}}
             
           />
           <br />
@@ -67,6 +88,7 @@ export default function Signup() {
             type="password"
             id="password"
             name="password"
+            value={password}
             onChange={e=>setPassword(e.target.value)}
           />
           <br />
