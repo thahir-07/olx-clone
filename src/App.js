@@ -7,7 +7,7 @@ import { BrowserRouter,Routes,Route } from 'react-router-dom';
 import {useContext,useEffect} from 'react'
 import { AuthContext, firebaseContext } from './Store/Context'
 import { getAuth,onAuthStateChanged } from 'firebase/auth'
-import Post, {postContext} from './Store/PostContext'
+import Post,{postContext} from './Store/PostContext'
 
 
 function App() {
@@ -34,9 +34,9 @@ function App() {
     <Route path='/create' Component={Create}/>
     <Route path='/viewpost' Component={ViewPost}/>
     </Routes>
-    
     </BrowserRouter>
     </Post>
+    
     
      );
 }

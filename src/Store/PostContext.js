@@ -1,10 +1,9 @@
 import { createContext, useState } from "react"
 export const postContext=createContext(null)
 export default function Post({children}){
-    const [postDetatils,setPostDetails]=useState(null)
+    const [postDetails,setPostDetails]=useState(null)
     return (
-        
-        <postContext.Provider value={{postDetatils,setPostDetails}}>
+        <postContext.Provider value={{postDetails,setPostDetails}}>
         {children}
         </postContext.Provider>
 

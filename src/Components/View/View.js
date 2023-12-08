@@ -1,33 +1,46 @@
 import React,{useState,useContext, useEffect} from 'react';
-
 import './View.css';
 import { postContext } from '../../Store/PostContext';
+import { firebaseContext } from '../../Store/Context';
+import {collection,getFirestore,query,getDocs,where } from 'firebase/firestore'
 function View() {
   const [userDetails,setUserDetails]=useState(null)
-  const {postDetails,setPostDetails}=useContext(postContext)
+  const {postDetails}=useContext(postContext)
+  const {firebase}=useContext(firebaseContext)
+  const db=getFirestore(firebase)
+  const {user}=postDetails
   useEffect(()=>{
+    console.log("postDetails",postDetails)
+    console.log(user)
+      const q=query(collection(db,'user'),where('id','==',user))
+      getDocs(q).then((querySnapshot)=>{
+        querySnapshot.forEach((snapshot)=>{
+          console.log("Snapshot",snapshot.data())
+        setUserDetails({data:snapshot.data(),id:querySnapshot.id})
 
+        })
+      })
   },[])
   return (
     <div className="viewParentDiv">
       <div className="imageShowDiv">
         <img
-          src="../../../Images/R15V3.jpg"
+          src={postDetails.imageUrl}
           alt=""
         />
       </div>
       <div className="rightSection">
         <div className="productDetails">
-          <p>&#x20B9; 250000 </p>
-          <span>YAMAHA R15V3</span>
-          <p>Two Wheeler</p>
-          <span>Tue May 04 2021</span>
+          <p>&#x20B9; {postDetails.price} </p>
+          <span>{postDetails.name}</span>
+          <p>{postDetails.category}</p>
+          <span>{postDetails.createDate}</span>
         </div>
-        <div className="contactDetails">
+        {userDetails &&<div className="contactDetails">
           <p>Seller details</p>
-          <p>No name</p>
-          <p>1234567890</p>
-        </div>
+          <p>{userDetails.data.username}</p>
+          <p>{userDetails.data.phone}</p>
+        </div>}
       </div>
     </div>
   );

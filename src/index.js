@@ -5,7 +5,6 @@ import App from './App';
 import Context, {firebaseContext} from './Store/Context'
 import {firebase} from './Firebase/config'
 
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -14,6 +13,7 @@ root.render(
   <App />
 
   </firebaseContext.Provider>
+ 
  </Context>
   </React.StrictMode>
 

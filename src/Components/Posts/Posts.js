@@ -14,6 +14,9 @@ function Posts() {
   const navigate=useNavigate()
   const db=getFirestore(firebase)
   
+  useEffect(() => {
+    console.log('State updated:', postDetails);
+  }, [postDetails]);
   useEffect(()=>{
     getDocs(collection(db,'products')).then((snapshot)=>{
       console.log(snapshot)
@@ -41,7 +44,11 @@ function Posts() {
               return(
                 
             <div className="card" onClick={()=>{
+              console.log(product)
               setPostDetails(product)
+                console.log("onclick")
+                console.log("Context vaue",postDetails)
+              
               navigate('viewpost')
             }}>
             <div className="favorite">
@@ -72,24 +79,39 @@ function Posts() {
           <span>Fresh recommendations</span>
         </div>
         <div className="cards">
-      <Link to={'/viewpost'} className='link'>
-          <div className="card">
-            <div className="favorite">
-              <Heart></Heart>
-            </div>
-            <div className="image">
-              <img src="../../../Images/R15V3.jpg" alt="" />
-            </div>
-            <div className="content">
-              <p className="rate">&#x20B9; 250000</p>
-              <span className="kilometer">Two Wheeler</span>
-              <p className="name"> YAMAHA R15V3</p>
-            </div>
-            <div className="date">
-              <span>10/5/2021</span>
-            </div>
-          </div>
-          </Link>
+      { 
+        products.map((post)=>{
+
+          return(
+            <div className="card" onClick={
+             ()=>{
+              setPostDetails(post)
+              navigate('/viewpost')
+             }
+             
+            }>
+        <div className="favorite">
+        <Heart></Heart>
+        </div>
+        <div className="image">
+        <img src={post.imageUrl} alt="" />
+        </div>
+        <div className="content">
+        <p className="rate">&#x20B9; {post.price}</p>
+        <span className="kilometer">{post.category}</span>
+        <p className="name">{post.name}</p>
+        </div>
+        <div className="date">
+        <span>{post.createDate}</span>
+        </div>
+        </div>
+          )
+        })
+
+        
+      }
+          
+          
         </div>
       </div>
     </div>
